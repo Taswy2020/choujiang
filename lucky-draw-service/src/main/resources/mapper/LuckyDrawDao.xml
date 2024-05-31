@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.taswy.choujiang.luckDraw.dao.LuckyDrawDao">
+
+    <resultMap type="com.taswy.choujiang.luckDraw.entity.LuckyDraw" id="LuckyDrawMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="profile" column="profile" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="endtime" column="endtime" jdbcType="TIMESTAMP"/>
+        <result property="capacity" column="capacity" jdbcType="INTEGER"/>
+        <result property="participantNumber" column="participant_number" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="LuckyDrawMap">
+        select id,
+               name,
+               profile,
+               createtime,
+               endtime,
+               capacity,
+               participant_number
+        from tb_lucky_draw
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="LuckyDrawMap">
+        select
+        id, name, profile, createtime, endtime, capacity, participant_number
+        from tb_lucky_draw
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="profile != null and profile != ''">
+                and profile = #{profile}
+            </if>
+            <if test="createtime != null">
+                and createtime = #{createtime}
+            </if>
+            <if test="endtime != null">
+                and endtime = #{endtime}
+            </if>
+            <if test="capacity != null">
+                and capacity = #{capacity}
+            </if>
+            <if test="participantNumber != null">
+                and participant_number = #{participantNumber}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from tb_lucky_draw
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
+            <if test="profile != null and profile != ''">
+                and profile = #{profile}
+            </if>
+            <if test="createtime != null">
+                and createtime = #{createtime}
+            </if>
+            <if test="endtime != null">
+                and endtime = #{endtime}
+            </if>
+            <if test="capacity != null">
+                and capacity = #{capacity}
+            </if>
+            <if test="participantNumber != null">
+                and participant_number = #{participantNumber}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into tb_lucky_draw(name, profile, createtime, endtime, capacity, participant_number)
+        values (#{name}, #{profile}, #{createtime}, #{endtime}, #{capacity}, #{participantNumber})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into tb_lucky_draw(name, profile, createtime, endtime, capacity, participant_number)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.profile}, #{entity.createtime}, #{entity.endtime}, #{entity.capacity},
+            #{entity.participantNumber})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into tb_lucky_draw(name, profile, createtime, endtime, capacity, participant_number)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.name}, #{entity.profile}, #{entity.createtime}, #{entity.endtime}, #{entity.capacity},
+            #{entity.participantNumber})
+        </foreach>
+        on duplicate key update
+        name = values(name),
+        profile = values(profile),
+        createtime = values(createtime),
+        endtime = values(endtime),
+        capacity = values(capacity),
+        participant_number = values(participant_number)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tb_lucky_draw
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="profile != null and profile != ''">
+                profile = #{profile},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime},
+            </if>
+            <if test="endtime != null">
+                endtime = #{endtime},
+            </if>
+            <if test="capacity != null">
+                capacity = #{capacity},
+            </if>
+            <if test="participantNumber != null">
+                participant_number = #{participantNumber},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from tb_lucky_draw
+        where id = #{id}
+    </delete>
+
+</mapper>
+

@@ -1,0 +1,13 @@
+cj:
+  jwt:
+    location: classpath:choujiang.jks
+    alias: choujiang123
+    password: choujiang123
+    tokenTTL: 30m
+  auth:
+    excludePaths:
+      - /search/**
+      - /user/login
+      - /items/**
+      - /hi
+# keytool -genkeypair -alias choujiang123 -keyalg RSA -keypass choujiang123 -keystore choujiang.jks -storepass choujiang123

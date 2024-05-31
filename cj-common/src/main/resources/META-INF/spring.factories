@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+    com.taswy.choujiang.common.config.SecurityConfig,\
+    com.taswy.choujiang.common.util.JwtTool,\
+    com.taswy.choujiang.common.config.MVCConfig
